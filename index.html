@@ -4,26 +4,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body{
-            background: cyan;
-        }
-        .middle{
-            height: 700px;
             width: 400px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translateX(-50%) translateY(-50%);
-            background: rgb(251, 255, 0);
-            margin: 20px;
-            border: 1px solid #fff;
-            box-shadow: 0 0 25px 9px #fff;
-            border-radius: 10%;
+            height: 800px;
         }
+        
+        .all{
+            width: 400px;
+            height: 800px;
+            background-color: #ffd400;
+        }
+
         .doors {
             margin-left: 19px;
         }
+
         .upper {
-            margin-top: 15px;
+            margin-top: 10px;
             margin-bottom: 10px;
             margin-left: 19px;
         }
@@ -53,7 +49,7 @@
         left: 0;
         top: 0;
         width: 400px; /* Full width */
-        height: 700px; /* Full height */
+        height: 600px; /* Full height */
         overflow: auto; /* Enable scroll if needed */
         background-color: rgb(0,0,0); /* Fallback color */
         background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
@@ -82,12 +78,14 @@
         text-decoration: none;
         cursor: pointer;
         }
+
+        
     </style>
 
 </head>
 
 <body>
-    <div class="middle">
+    <div class="all">
         <div class="upper">
 
             <input type="number" id="repeatCount" style="width:116px;height:44px;" value=1>
@@ -160,9 +158,10 @@
                <span>What's Monty Hall?</span>
             </button>
 
-            <button style="width: 115px; height: 100px; background: url(Photos/play_store.png) no-repeat; cursor:pointer; border:none;"
+            <button style="width: 115px; height: 50px;  cursor:pointer; border:none;"
             onclick="window.open('https://play.google.com/store/apps/details?id=com.mertiq.MontyHallProblem', '_blank');">
                 <span></span>
+                <i class="fab fa-google-play"></i>
              </button>
             
             <button id="htp" style="width: 115px; cursor:pointer; border:none; border-radius: 30%;">
@@ -184,8 +183,6 @@
             
             </div>
              
-
-
         </div>
     </div>
 
@@ -345,47 +342,61 @@
         }
 
         function FirstChoice(door) {
+            let x;
+            let y;
             if (door == "door1") {
                 if (doorWithCar == 1) {
                     firstOpenedDoor = "door3"
+                    x="third"
                 }
                 else {
                     if (doorWithCar == 2) {
                         firstOpenedDoor = "door3"
+                        x="third"
                     }
                     else {
                         firstOpenedDoor = "door2"
+                        x="second"
                     }
                 }
+                y="first";
             }
             if (door == "door2") {
                 if (doorWithCar == 2) {
                     firstOpenedDoor = "door1"
+                        x="first"
                 }
                 else {
                     if (doorWithCar == 1) {
                         firstOpenedDoor = "door3"
+                        x="third"
                     }
                     else {
                         firstOpenedDoor = "door1"
+                        x="first"
                     }
                 }
+                y="second";
             }
             if (door == "door3") {
                 if (doorWithCar == 3) {
                     firstOpenedDoor = "door2"
+                        x="second"
                 }
                 else {
                     if (doorWithCar == 1) {
                         firstOpenedDoor = "door2"
+                        x="second"
                     }
                     else {
                         firstOpenedDoor = "door1"
+                        x="first"
                     }
                 }
+                y="third";
             }
             Hide(firstOpenedDoor)
-            document.getElementById("change_or_not_ask").value = "Do you want to change your choice?";
+            document.getElementById("change_or_not_ask").value = "You choosed " + y + " door so " + x + " door opened. Do you want to change your choice?";
             return door;
         }
 
@@ -422,9 +433,12 @@
             }
             UpdateStats()
         }
-
+       
         function getMouseClickedPosition(event) {
-            if (event.clientX < 200 && event.clientX > 100 && event.clientY < 250 && event.clientY > 50) {
+            console.log(event.clientX)
+            console.log(event.clientY)
+            
+            if (event.clientX < 155 && event.clientX > 35  && event.clientY < 270  && event.clientY > 70) {
                 if (isFirstChoice) {
                     firsChosenDoor = FirstChoice("door1")
                     isFirstChoice = false
@@ -438,7 +452,7 @@
                     return;
                 }
             }
-            else if (event.clientX < 300 && event.clientX > 200 && event.clientY < 250 && event.clientY > 50) {
+            else if (event.clientX < 275 && event.clientX > 155  && event.clientY < 270  && event.clientY > 70) {
                 if (isFirstChoice) {
                     firsChosenDoor = FirstChoice("door2")
                     isFirstChoice = false
@@ -452,7 +466,7 @@
                     return;
                 }
             }
-            else if (event.clientX < 400 && event.clientX > 300 && event.clientY < 250 && event.clientY > 50) {
+            else if (event.clientX < 400 && event.clientX > 275  && event.clientY < 270  && event.clientY > 70) {
                 if (isFirstChoice) {
                     firsChosenDoor = FirstChoice("door3")
                     isFirstChoice = false
@@ -487,6 +501,7 @@
         }
 
         function UpdateStats() {
+            
             let x = getStorage().changeWin * 100 / (getStorage().changeWin + getStorage().changeLose);
             if(!isNaN(x))
                 document.getElementById("changeWin").innerText = getStorage().changeWin + "  (" + x.toFixed(2) + " %)"
@@ -511,7 +526,7 @@
 
         document.addEventListener("click", getMouseClickedPosition);
 
-
+        
         CreateGame()
 
 
