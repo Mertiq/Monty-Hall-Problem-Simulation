@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 <head>
@@ -88,12 +89,19 @@
     <div class="all">
         <div class="upper">
 
-            <input type="number" id="repeatCount" style="width:116px;height:44px;" value=1>
-            <select id="changeornot" style="width:116px;height:50px;" value="change">
+            <input type="number" id="repeatCount" style="width:50px;height:44px;" value=1>
+            <select id="changeornot" style="width:90px;height:50px;" value="change">
 
                 <option>CHANGE</option>
 
                 <option>NOT CHANGE</option>
+
+            </select>
+            <select id="speed" style="width:90px;height:50px;" value="1">
+
+                <option>1</option>
+                <option>500</option>
+                <option>1000</option>
 
             </select>
             <button id="simulateButton" style="width:116px;height:50px;" onclick="i()">
@@ -285,7 +293,7 @@
             return stats
 
         }
-        
+        let speed
         function Simulate() {
             
             let ischange = document.getElementById("changeornot").value
@@ -298,14 +306,14 @@
                 setTimeout(function() {
                     CreateGame()
                     x = Math.floor(Math.random() * 3) + 1;
-                }, 1000);
+                },speed* 1);
                 setTimeout(function() {
                     firsChosenDoor = FirstChoice("door" + x)
                     console.log("firsChosenDoor : ", firsChosenDoor);
                     index = doors.indexOf("door" + x)
                     doors.splice(index, 1);
                     console.log("firstOpenedDoor : ", firstOpenedDoor);                    
-                }, 2000);
+                }, speed*2);
                 setTimeout(function() {
                     if (ischange == "CHANGE") {
                         index = doors.indexOf(firstOpenedDoor)
@@ -319,13 +327,14 @@
                         console.log("secondChosenDoor : ", secondChosenDoor);
                         CheckWin(secondChosenDoor)
                     }
-                }, 3000);
+                }, speed*3);
             
         }
         let simDelay;
-
+        
         function i()
         {
+            speed = document.getElementById("speed").value
             let count = parseInt(document.getElementById("repeatCount").value)
             simDelay = setInterval(function() {
                 if (count-- == 0) {
@@ -333,7 +342,7 @@
                     return ;
                 }
                 Simulate();
-                }, 3000);
+                },speed* 3);
         }
        
 
