@@ -96,7 +96,7 @@
                 <option>NOT CHANGE</option>
 
             </select>
-            <button id="simulateButton" style="width:116px;height:50px;" onclick="Simulate()">
+            <button id="simulateButton" style="width:116px;height:50px;" onclick="i()">
                 Simulate
             </button>
 
@@ -208,6 +208,7 @@
         let secondChosenDoor;
         let simulating = false
 
+        let firstOpenedDoors = [];
 
         class Stats {
 
@@ -284,43 +285,57 @@
             return stats
 
         }
-        function sleep(milliseconds) {
-            const date = Date.now();
-            let currentDate = null;
-            do {
-                currentDate = Date.now();
-            } while (currentDate - date < milliseconds);
-            }
-
+        
         function Simulate() {
-            let count = parseInt(document.getElementById("repeatCount").value)
+            
             let ischange = document.getElementById("changeornot").value
             console.log(ischange);
-
-            for (let i = 0; i < count; i++) {
-
+            
                 var doors = ["door1", "door2", "door3"];
-                CreateGame()
-                let x = Math.floor(Math.random() * 3) + 1;
-                firsChosenDoor = FirstChoice("door" + x)
-                console.log("firsChosenDoor : ", firsChosenDoor);
-                let index = doors.indexOf("door" + x)
-                doors.splice(index, 1);
-                console.log("firstOpenedDoor : ", firstOpenedDoor);
-                if (ischange == "CHANGE") {
-                    let index = doors.indexOf(firstOpenedDoor)
+                let x
+                let index
+                let c = 0
+                setTimeout(function() {
+                    CreateGame()
+                    x = Math.floor(Math.random() * 3) + 1;
+                }, 1000);
+                setTimeout(function() {
+                    firsChosenDoor = FirstChoice("door" + x)
+                    console.log("firsChosenDoor : ", firsChosenDoor);
+                    index = doors.indexOf("door" + x)
                     doors.splice(index, 1);
-                    secondChosenDoor = SeconChoice(doors[0])
-                    console.log("secondChosenDoor : ", secondChosenDoor);
-                    CheckWin(secondChosenDoor)
-                }
-                else {
-                    secondChosenDoor = SeconChoice(firsChosenDoor)
-                    console.log("secondChosenDoor : ", secondChosenDoor);
-                    CheckWin(secondChosenDoor)
-                }
-            }
+                    console.log("firstOpenedDoor : ", firstOpenedDoor);                    
+                }, 2000);
+                setTimeout(function() {
+                    if (ischange == "CHANGE") {
+                        index = doors.indexOf(firstOpenedDoor)
+                        doors.splice(index, 1);
+                        secondChosenDoor = SeconChoice(doors[0])
+                        console.log("secondChosenDoor : ", secondChosenDoor);
+                        CheckWin(secondChosenDoor)
+                    }
+                    else {
+                        secondChosenDoor = SeconChoice(doors[0])
+                        console.log("secondChosenDoor : ", secondChosenDoor);
+                        CheckWin(secondChosenDoor)
+                    }
+                }, 3000);
+            
         }
+        let simDelay;
+
+        function i()
+        {
+            let count = parseInt(document.getElementById("repeatCount").value)
+            simDelay = setInterval(function() {
+                if (count-- == 0) {
+                    clearInterval(simDelay);
+                    return ;
+                }
+                Simulate();
+                }, 3000);
+        }
+       
 
         function CreateGame() {
             for (var i = 1; i < 4; i++) {
@@ -395,7 +410,7 @@
                 }
                 y="third";
             }
-            Hide(firstOpenedDoor)
+            Hide(firstOpenedDoor);
             document.getElementById("change_or_not_ask").value = "You choosed " + y + " door so " + x + " door opened. Do you want to change your choice?";
             return door;
         }
